@@ -19,10 +19,12 @@ int main(int argc, char * argv[])
     int *dataset = new int[N];
     int *bined_dataset = new int[N];
 
-    int * binSize = new int[binNUM];
-    int * binCount = new int[binNUM];
+    int * binSize;
+    int * binCount;
 
-    
+    int * local_data;
+    int * binedData;
+    int * binTotal;
 
     double time_elapsed,time_max;
     int taskNUM, taskID;
@@ -41,28 +43,25 @@ int main(int argc, char * argv[])
         MPI_Finalize();
         return 0;
     }
-    int * local_data = new int[N/taskNUM];
-    int * binedData = new int[N/taskNUM];
-    int * binTotal = new int [binNUM*taskNUM];
-
-
-
+    binSize = new int[binNUM]();
+    binCount = new int[binNUM]();
+    local_data = new int[N/taskNUM]();
+    binedData = new int[N/taskNUM]();
+    binTotal = new int [binNUM*taskNUM]();
 
     printf ("MPI task %d has started...\n", taskID);
 
 
     double start = MPI_Wtime();
 
-    
 
+    // MPI_Barrier(MPI_COMM_WORLD);
     MPI_Scatter(dataset, N/taskNUM, MPI_INT, local_data, N/taskNUM, MPI_INT, 0, MPI_COMM_WORLD);
-    // if (taskNUM == 0)
-    //     free(dataset);
-    // histogram(dataset, N, binNUM, binSize, bined_dataset);
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (taskID == 0)
+        free(dataset);
     histogram(local_data, N/taskNUM, binNUM, binSize, binedData, taskID);
-    // if (taskID == 3)
-    //         printf ("Step 3 with index \n");
-    
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(binSize , binCount, binNUM, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     MPI_Gather(binSize, binNUM, MPI_INT, binTotal, binNUM, MPI_INT, 0, MPI_COMM_WORLD);
@@ -76,15 +75,8 @@ int main(int argc, char * argv[])
 
     if (taskID == 0 and print_flag == 1)
     {
-        // for(int i = 0; i< binNUM; i++)
-        // printf("%4d\t", binCount[i]);
-        // for(int i = 0; i< N; i++)
-        // printf("%4d\t", dataset[i]);
-        // for(int i = 0; i< N; i++)
-        // printf("%4d\t", bined_dataset[i]);
-        // for(int i = 0; i< binNUM*taskNUM; i++)
-        // printf("%4d\t", binTotal[i]);
-        // printData(N, binNUM,  taskNUM, binTotal,  binCount, bined_dataset);
+
+        printData(N, binNUM,  taskNUM, binTotal,  binCount, bined_dataset);
         
     }
 
@@ -132,17 +124,18 @@ void histogram(int * dataset, int N, int binNUM, int * binSize, int * binedData,
 {
     int interval = maxInt / binNUM;
     int binInd;
-    int * tempData [binNUM];
+    // int tempData[binNUM][N];
+    int ** tempData = new int* [binNUM];
     for(int i =0; i < binNUM; i++)
-        tempData[i] = new int[N];
+        tempData[i] = new int[N]();
 
     
     for(int i = 0; i < N; i++)
     {
-        binInd = dataset[i]/interval;
-        // output->binSize[binInd]++;
+        binInd = (dataset[i] - 1)/interval;
+        // printf("dataset[i]:%d, %d, %d\n",dataset[i], binInd, binSize[binInd]);
         tempData[binInd][binSize[binInd]++] = dataset[i];
-        // printf("dataset[i]:%d, %d, %d",dataset[i], binInd, output->binSize[binInd]);
+        // binSize[binInd]++;
     }
 
     int index = 0;
@@ -152,11 +145,11 @@ void histogram(int * dataset, int N, int binNUM, int * binSize, int * binedData,
         for(int k = 0; k < binSize[j]; k++)
         {
         binedData[index++] = tempData[j][k];
-        // if (taskID == 3)
-        // printf ("Step 3 with index = %d\n",index);
         }
     }
 
-    
-    // free(tempData);
+    for(int i =0; i < binNUM; i++)
+        delete [] tempData[i];
+    delete [] tempData;
+
 }

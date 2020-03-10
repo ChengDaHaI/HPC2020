@@ -30,7 +30,7 @@ int main(int argc, char * argv[ ])
     pi_avg = 0; 
     double start = MPI_Wtime();
     /* All tasks calculate pi using dartboard algorithm */
-    pi_task = dboardPI(dartsNUM);
+    pi_task = dboardPI(dartsNUM/taskNUM);
     double stop = MPI_Wtime();
     time_elapsed = stop - start;
     MPI_Reduce(&time_elapsed, &time_max, 1, MPI_DOUBLE, MPI_MAX,
@@ -41,8 +41,8 @@ int main(int argc, char * argv[ ])
     /* Master computes average for this iteration and all iterations */
     if (taskID == MASTER) {
         printf ("\nReal value of PI: 3.1415926535897 \n");
-    printf("Simulated PI Value is :%f\n", pi_sum/taskNUM);
-    printf("Time elapsed:%f seconds\n", time_max);
+        printf("Simulated PI Value is :%f\n", pi_sum/taskNUM);
+        printf("Time elapsed:%f seconds\n", time_max);
     }
     MPI_Finalize();
     return 0;
