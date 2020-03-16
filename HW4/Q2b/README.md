@@ -10,7 +10,7 @@
 
 `
 make;
-mpirun Q2 5 100 1
+mpirun Q2 4 100 1
 `
 
 where the first argument *5* is the number of bin/class, the second argument *100* is the number of integers in dataset, the third argument *1* indicates to print data values in each class.
