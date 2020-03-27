@@ -12,3 +12,5 @@
  `Author:   3336 has    343 co-authors`
 - The elapsed time of the MPI code:
   `Time elapsed: 0.239682`
+
+- The "output.txt" file where the distribution data is stored. Run `python3 plotDistribution.py` and get the "Distribution.pdf" graph. Numpy and Matplotlib are required.
