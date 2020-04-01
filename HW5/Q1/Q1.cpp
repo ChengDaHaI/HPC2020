@@ -166,7 +166,7 @@ void dataset_plot(int * output, int lenght, int max)
 
     fp = fopen("./output.txt", "wb");
 
-    fwrite(numCoAuthorList, sizeof(int), sizeof(numCoAuthorList), fp);
+    fwrite(numCoAuthorList, sizeof(int), max, fp);
     fclose(fp);
 
 }
