@@ -154,9 +154,10 @@ void dataset_plot(int * output, int lenght, int max)
             printf("\nError in Finding MAX!!!\n");
         }
     }
+    int total = 0;
     for(int i =0; i< max; i++)
-        printf("%6d\t", numCoAuthorList[i]);
-
+        total +=  numCoAuthorList[i];
+    printf("Total author:%d", total);
     FILE *fp;
 
     fp = fopen("./output.txt", "wb");
