@@ -154,6 +154,8 @@ void dataset_plot(int * output, int lenght, int max)
             printf("\nError in Finding MAX!!!\n");
         }
     }
+    for(int i =0; i< max; i++)
+        printf("%6d\t", numCoAuthorList[i]);
 
     FILE *fp;
 
