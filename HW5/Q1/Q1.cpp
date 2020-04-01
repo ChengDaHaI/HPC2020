@@ -143,7 +143,9 @@ int dataset_maxCoAuthor(int * output, int lenght)
 
 void dataset_plot(int * output, int lenght, int max)
 {
-    int numCoAuthorList[max] = {0};
+    //int numCoAuthorList[max] = {0};
+    int* numCoAuthorList = (int*)malloc(max * sizeof(int));
+    memset(numCoAuthorList, 0, max);
     for(int i = 0; i < lenght; i++)
     {
         if(output[i] <= max)
@@ -154,10 +156,12 @@ void dataset_plot(int * output, int lenght, int max)
             printf("\nError in Finding MAX!!!\n");
         }
     }
+    /*
     int total = 0;
     for(int i =0; i< max; i++)
         total +=  numCoAuthorList[i];
     printf("Total author:%d", total);
+    */
     FILE *fp;
 
     fp = fopen("./output.txt", "wb");

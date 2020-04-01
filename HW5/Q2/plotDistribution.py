@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 filename = "./output.txt"
 datafile = np.fromfile(filename, dtype=np.int32, count=343, sep='', offset=0)
-for i in range(datafile.size):
-    print("Data:", datafile[i])
+#for i in range(datafile.size):
+#    print("Data:", datafile[i])
 
 plt.plot(range(datafile.size), np.log10(datafile + 1))
 # plt.title("Distribution")
