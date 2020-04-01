@@ -70,7 +70,7 @@ void dataset_read( int * dataset)
             break;
         }
     }
-    for(int i = 1; i < NumAuthor; i++){
+    for(int i = 1; i < 2 * DataLen; i++){
         fscanf(datafile, "%d", &dataset[i]);
     }
     fclose(datafile);
