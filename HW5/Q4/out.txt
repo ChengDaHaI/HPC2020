@@ -1,0 +1,4 @@
+Time elapsed: 115.117279
+Error in Kernel output_parse:no error
+Elapsed time in Kernel output_parse: 4723.672363
+Total number is 1000724
